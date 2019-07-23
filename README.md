@@ -1,4 +1,4 @@
-Reference project for flux architecture with react and redux.
+Projeto de todos usando arquitetura flux com react e redux.
 
 ## Scripts
 
