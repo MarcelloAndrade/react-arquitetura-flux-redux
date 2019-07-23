@@ -1,3 +1,5 @@
+Reference project for flux architecture with react and redux.
+
 ## Scripts
 
 ### `npm start`
