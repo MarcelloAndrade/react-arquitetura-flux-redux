@@ -6,11 +6,14 @@ import { bindActionCreators } from "redux";
 
 import * as TodoActions from "../../store/actions/todos";
 
-const TodoList = ({ todos, addTodo }) => (
+const TodoList = ({ todos, addTodo, removeTodo }) => (
   <Fragment>
     <ul>
       {todos.map(t => (
-        <li key={t.id}>{t.text}</li>
+        <li key={t.id}>
+          {t.text}
+          <button onClick={() => removeTodo(t.id)}>Remover</button>
+        </li>
       ))}
     </ul>
     <button onClick={() => addTodo("Estudar React")}>Adicionar</button>
@@ -19,6 +22,7 @@ const TodoList = ({ todos, addTodo }) => (
 
 TodoList.prototype = {
   addTodo: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
