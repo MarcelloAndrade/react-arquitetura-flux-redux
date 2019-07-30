@@ -8,24 +8,35 @@ import * as FavoriteActions from "../../store/actions/favorites";
 
 class Main extends Component {
   static propTypes = {
-    addFavorites: PropTypes.func.isRequired,
-    favorites: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        description: PropTypes.string,
-        url: PropTypes.string
-      })
-    ).isRequired
+    addFavoritesRequest: PropTypes.func.isRequired,
+    favorites: PropTypes.shape({
+      loading: PropTypes.bool,
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          name: PropTypes.string,
+          description: PropTypes.string,
+          url: PropTypes.string
+        })
+      )
+      //error: PropTypes.oneOfType([null, PropTypes.string])
+    }).isRequired
   };
 
   state = {
     repositoryInput: ""
   };
 
+  componentDidMount() {
+    this.props.addFavoritesRequest("vuejs/vue");
+  }
+
   handleRepository = e => {
     e.preventDefault();
-    this.props.addFavorites();
+
+    this.props.addFavoritesRequest(this.state.repositoryInput);
+
+    this.setState({ repositoryInput: "" });
   };
 
   render() {
@@ -33,15 +44,21 @@ class Main extends Component {
       <Fragment>
         <form onSubmit={this.handleRepository}>
           <input
-            placeholder="usuario/repositorio"
+            placeholder="facebook/react"
             value={this.setState.repositoryInput}
             onChange={e => this.setState({ repositoryInput: e.target.value })}
           />
           <button type="submit">Adicionar</button>
+
+          {this.props.favorites.loading && <span>Carregando...</span>}
+
+          {!!this.props.favorites.error && (
+            <span style={{ color: "#F00" }}>{this.props.favorites.error}</span>
+          )}
         </form>
 
         <ul>
-          {this.props.favorites.map(f => (
+          {this.props.favorites.data.map(f => (
             <li key={f.id}>
               <p>
                 <strong>{f.name}</strong> ({f.description})
